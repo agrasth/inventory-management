@@ -17,12 +17,12 @@ type Item interface {
 
 // Inventory holds a slice of items
 type Inventory struct {
-	items []Item
+	items map[int]Item
 }
 
 // NewInventory creates a new inventory
 func NewInventory() *Inventory {
-	return &Inventory{items: []Item{}}
+	return &Inventory{items: map[int]Item{}}
 }
 
 // AddItem adds a new item to the inventory
@@ -35,34 +35,35 @@ func (inv *Inventory) AddItem(item Item) error{
 		}
 	}
 
-	inv.items = append(inv.items, item)
+	inv.items[item.GetID()] = item
 	log.Info("Item added successfully")
 	return nil
 }
 
 // RemoveItem removes an item from the inventory
 func (inv *Inventory) RemoveItem(id int) error {
-	for index, i := range inv.items {
-		if i.GetID() == id {
-			inv.items = append(inv.items[:index], inv.items[index+1:]...)
-			log.Info("Item Removed successfully")
-			return nil
-		}
+	// Check if the item exists
+	if _, exists := inv.items[id]; !exists {
+		log.Warn("Attempted to remove non-existent item")
+		return errors.New("item not found")
 	}
-	log.Warn("Attempted to remove non-existent item")
-	return errors.New("item not found")
+
+	delete(inv.items, id)
+	log.Info("Item removed successfully")
+	return nil
 }
 
+
 // ListItems lists all items in the inventory
-func (inv* Inventory) ListItems() {
+func (inv *Inventory) ListItems() {
 	if len(inv.items) == 0 {
-		log.Warn("Attempted list empty inventory")
+		log.Warn("Attempted to list empty inventory")
 		return
 	}
 
 	fmt.Println("Items in inventory:")
-	for _,i := range inv.items {
-		fmt.Println(i.Details())
+	for _, item := range inv.items {
+		fmt.Println(item.Details())
 	}
 }
 

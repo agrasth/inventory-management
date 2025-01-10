@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"inventory-management/inventory"
-	"inventory-management/items"
+	"github.com/agrasth/inventory-management/inventory"
+	"github.com/agrasth/inventory-management/items"
 )
 
 // runPanic runs a function that panics
@@ -12,14 +12,15 @@ func runPanic(err error) {
 	panic(err)
 }
 
-// // AddItem adds a new item to the inventory
-func handlePanic(){
+// handlePanic handles panics gracefully
+func handlePanic() {
 	if r := recover(); r != nil {
-		fmt.Println("Recovered from panic")
+		fmt.Println("Recovered from panic:", r)
 	}
 }
 
 func main() {
+	// Create a new inventory
 	inv := inventory.NewInventory()
 
 	// Add items to the inventory
@@ -28,7 +29,6 @@ func main() {
 		fmt.Println(err)
 		runPanic(err)
 	}
-	
 
 	err = inv.AddItem(&items.Electronic{ID: 2, Name: "Electronic 1", Brand: "Brand 1"})
 	if err != nil {
@@ -43,8 +43,9 @@ func main() {
 	err = inv.RemoveItem(1)
 	if err != nil {
 		fmt.Println(err)
+		runPanic(err)
 	}
 
+	// List remaining items
 	inv.ListItems()
-
 }
