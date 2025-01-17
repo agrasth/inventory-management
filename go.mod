@@ -1,4 +1,4 @@
-module github.com/agrasth/inventory-management
+module inventory-management
 
 go 1.23.4
 
