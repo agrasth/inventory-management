@@ -1,7 +1,7 @@
 package application
 
 import (
-	"inventory-management/inventory"
+	"github.com/agrasth/inventory-management/inventory"
 )
 
 func Run() {

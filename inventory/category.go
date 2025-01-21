@@ -1,6 +1,6 @@
 package inventory
 
-import "inventory-management/constants"
+import "github.com/agrasth/inventory-management/constants"
 
 // Category is a custom type for item categories
 type Category int32

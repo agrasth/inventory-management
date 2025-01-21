@@ -1,6 +1,6 @@
 package main
 
-import "inventory-management/application"
+import "github.com/agrasth/inventory-management/application"
 
 func main() {
 	application.Run()
