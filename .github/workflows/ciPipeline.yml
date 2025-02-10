@@ -24,7 +24,7 @@ jobs:
         run: echo "branch_name=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
 
       - name: Print Branch Name
-        run: echo "Checked out to branch: ${{ env.branch_name }}"
+        run: echo "Checked out to branch:${{ env.branch_name }}"
 
       - name: Install JFrog CLI
         run: curl -fL https://getcli.jfrog.io | sh && sudo mv jfrog /usr/local/bin/
