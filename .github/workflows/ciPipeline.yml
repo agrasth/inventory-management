@@ -35,7 +35,15 @@ jobs:
         run: |
           jfrog config add myconfig --url=https://rtcli0210.jfrogdev.org/artifactory --user=${{ secrets.JFROG_USER }} --password=${{ secrets.JFROG_PASSWORD }}
         
-      - name: Publish Build
+      - name: Set Build Name and Number
         run: |
-          # Replace with your actual JFrog CLI command to publish a build
-          jfrog rt upload "path/to/your/build/files/*" "your-artifactory-repo/path/"
+          export BUILD_NAME="example-build"
+          export BUILD_NUMBER="${{ github.run_number }}"
+          echo "BUILD_NAME=${BUILD_NAME}" >> $GITHUB_ENV
+          echo "BUILD_NUMBER=${BUILD_NUMBER}" >> $GITHUB_ENV
+          
+      - name: Collect Environment Information
+        run: jfrog rt bag "${{ env.BUILD_NAME }}" "${{ env.BUILD_NUMBER }}"
+
+      - name: Publish Build Information
+        run: jfrog rt bp "${{ env.BUILD_NAME }}" "${{ env.BUILD_NUMBER }}"
