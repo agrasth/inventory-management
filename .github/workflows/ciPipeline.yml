@@ -1,0 +1,39 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: Check out a branch
+        run: git checkout dev  # Replace YOUR_BRANCH_NAME with the branch you want to checkout
+
+      - name: Get the branch name
+        id: get-branch
+        run: echo "branch_name=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
+
+      - name: Print Branch Name
+        run: echo "Checked out to branch: ${{ env.branch_name }}"
+
+      - name: Install JFrog CLI
+        run: curl -fL https://getcli.jfrog.io | sh && sudo mv jfrog /usr/local/bin/
+
+      - name: Configure JFrog CLI
+        run: |
+          jfrog config add myconfig --url=https://rtcli0210.jfrogdev.org/artifactory --user=${{ secrets.JFROG_USER }} --password=${{ secrets.JFROG_PASSWORD }}
+        
+      - name: Publish Build
+        run: |
+          # Replace with your actual JFrog CLI command to publish a build
+          jfrog rt upload "path/to/your/build/files/*" "your-artifactory-repo/path/"
